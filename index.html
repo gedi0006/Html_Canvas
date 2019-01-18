@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Abhaya Libre' rel='stylesheet'>
+
+
+    <style>
+            #canvas{
+            border: 2px dashed rgb(33, 48, 114);
+            margin : 2rem auto;
+            width: 90%;
+        }
+        </style>
+</head>
+<body>
+    
+
+            <canvas id="canvas"></canvas>
+            <canvas id="canvas2"></canvas>
+
+            <script>
+                
+                const colorcode = () =>{
+
+                    return '#' +
+                    Math.random().toString(16).slice(2,8) 
+               };
+
+            
+
+                let canvas , ctx ;
+
+                document.addEventListener('DOMContentLoaded',()=>{
+
+
+                    fetch('./mydata.json')
+                    .then(response =>{
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        buildPie(data);
+                    })
+                    .catch(error =>
+                     console.error('Error:', error)
+                     )
+
+                    
+
+                });
+
+                function buildPie(data){
+                    canvas = document.getElementById('canvas');
+                    canvas.width  = 800;
+                    canvas.height = 600;
+                    ctx = canvas.getContext('2d');
+
+
+                    let total = data.reduce((total , subject) =>{
+                        
+                            return total + subject.percentage
+                    },0);
+                   
+                   let StartAngle = 0;
+                   let r = 100; // radius
+                   let cx = canvas.width/2;
+                   let cy = canvas.height/2;
+
+                   data.forEach(subject  => {
+
+                    ctx.fillStyle = colorcode();
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = '#333';
+
+
+                    ctx.beginPath();
+
+                    console.log(total , subject.percentage , subject.percentage/total);
+
+
+                    let EndAngle = ((subject.percentage / total) * Math.PI * 2) + StartAngle ; 
+
+                    ctx.moveTo(cx,cy);
+
+                    ctx.arc(cx , cy , r, StartAngle, EndAngle , false);
+                    ctx.lineTo(cx,cy);
+
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.closePath();
+
+
+                    ctx.beginPath();
+                    ctx.font = '15px Abhaya Libre';
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = 'black';
+
+                    let Theta = (StartAngle + EndAngle)/2;
+
+                    let dx = Math.cos(Theta) * 1.5 * r;
+                    let dy = Math.sin(Theta) * 1.5 * r;
+
+
+                    ctx.fillText(subject.name , dx + cx, dy + cy);
+                    ctx.fillText(subject.percentage + "%", dx + cx, dy + (cy+15));
+
+
+                    ctx.closePath();
+
+                    StartAngle = EndAngle;
+
+                })
+
+                ctx.beginPath();
+                ctx.lineWidth = "2";
+                ctx.strokeStyle = "blue";
+                ctx.rect(630,60, 140, 200); 
+                ctx.stroke();
+                ctx.font = '15px Abhaya Libre';
+
+                ctx.fillText("Science",670,100 );
+                ctx.fillText("46.7%",730,100 );
+                ctx.fillText("Math",670,140 );
+                ctx.fillText("34.4%",730,140 );
+                ctx.fillText("History",670,180 );
+                ctx.fillText("11.3%",730,180 );
+                ctx.fillText("Language",670,220 );
+                ctx.fillText("7.9%",730,220 );
+
+                ctx.closePath();
+
+                }
+
+
+
+               
+                </script>
+        </body>
+</html>

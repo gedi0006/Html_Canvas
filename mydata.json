@@ -1,0 +1,29 @@
+[{
+    "id": 1,
+    "name" : "Science",
+    "percentage" : 46.7,
+    "color": "hsl(226, 100%, 50%)"
+  },
+  {
+    "id": 2,
+   "name" :"Math",
+   "percentage" : 34.4,
+   "color":"hsl(197, 100%, 50%)"
+
+  },
+  {
+    "id": 3,
+    "name" : "History",
+    "percentage" : 11.3,
+    "color":"hsl(185, 100%, 50%)"
+
+  },
+  {
+      "id":4,
+      "name":"Language",
+      "percentage" : 7.9,
+      "color":"hsl(221, 59%, 50%)"
+
+
+  }
+]
