@@ -15,6 +15,15 @@
             margin : 2rem auto;
             width: 90%;
         }
+
+        #canvas2{
+            border: 2px dashed rgb(33, 48, 114);
+            margin: 2rem auto;
+            width:90%;
+            position: relative; 
+           
+
+        }
         </style>
 </head>
 <body>
@@ -45,6 +54,11 @@
                     .then(data => {
                         console.log(data);
                         buildPie(data);
+                    
+                    })
+                    .then(data1 =>{
+                        console.log(data1);
+                        buildLine(data1);
                     })
                     .catch(error =>
                      console.error('Error:', error)
@@ -136,6 +150,71 @@
 
                 }
 
+
+
+                function buildLine(data1)
+                {
+                    canvas2 = document.getElementById('canvas2');
+                    canvas2.width  = 800;
+                    canvas2.height = 600;
+                    ctx = canvas2.getContext('2d');
+
+
+                    let total1 = data1.reduce((total1 , subject1) =>{
+                        
+                            return total1 + subject1.percentage
+                    },0);
+
+
+                   var percentage1= subject1.percentage;
+                   
+                    var NumberOfPoints = percentage1.length;
+                      
+                    var offsetX = 30;
+
+                    var offsetY = 300;
+
+                    var spaceBetweenPoints = ((canvas2.width - offsetX)/NumberOfPoints);
+
+                    var graphHeight = 300;
+
+                    var x = 0 + offsetX;
+
+                    var y = 0 + offsetY - (graphHeight * (percentage1/total1));
+
+                    ctx.moveTo(x,y);
+
+                    ctx.beginPath();
+
+                    for(var i = 0 ; i< percentage1.length; i++)
+                    {
+                        var pct = percentage1/total1;
+
+                        y = offsetY - (graphHeight * (percentage1/total1));
+
+                        ctx.lineTo(x,y);
+
+                        var lbl = Math.round(pct * 100).toString();
+
+                        if(pct <=.2){
+                            ctx.fillText(lbl,x,y - 30 );
+                        }else{
+                            ctx.fillText(lbl,x,y+30);
+                        }
+
+                        x = x+spaceBetweenPoints;
+                    }
+
+                    
+                    ctx.stroke();
+                    ctx.strokeStyle = "#999";
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(offsetX , canvas2.height-graphHeight);
+                    ctx.lineTo(offsetX, graphHeight);
+                    ctx.lineTo(canvas2.width-offsetX, graphHeight);
+                    ctx.stroke();
+                }
 
 
                
